@@ -1,12 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <unistd.h>
+#include "shell.h"
 
 int main(void)
 {
-	int exec = 0;
+	int exec = 0, getl_r;
 	size_t len = 0;
 	pid_t pid;
 	char *buffer = NULL;
@@ -16,7 +12,9 @@ int main(void)
 	while (1) /* Loop until forced to quit */
 	{
 		printf("%s", prmpt); /* Display the command prompt */
-		getline(&buffer, &len, stdin); /* Wait for and store user input */
+		getl_r = getline(&buffer, &len, stdin); /* Wait for and store user input */
+		if (getl_r == -1)
+			break;
 
 		pid = fork(); 	/* Create a child process */
 		if (pid == -1)
@@ -27,9 +25,11 @@ int main(void)
 			exec = execve(argv[0], argv, NULL); /* Attempt to execute the string as a command */
 			if (exec == -1)
 				exit(EXIT_FAILURE);
+
 		}
 		if (wait(NULL) == -1) /* Let the child process exit before continuing */
 			exit(EXIT_FAILURE);
 	}
+	free(buffer);
 	return (0);
 }
