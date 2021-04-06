@@ -12,12 +12,14 @@
 
 
 /* helper functions */
+int _strlen(char *s);
 
 
 /* our functions */
 
 
 /* error functions */
-
+int write_error(char c);
+void error_main(char **av, char *command, int count);
 
 #endif

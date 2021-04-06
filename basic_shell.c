@@ -24,8 +24,9 @@ int main(void)
 			argv[0] = strtok(buffer, "\n"); /* Format input for execution */
 			exec = execve(argv[0], argv, NULL); /* Attempt to execute the string as a command */
 			if (exec == -1)
+			{
 				exit(EXIT_FAILURE);
-
+			}
 		}
 		if (wait(NULL) == -1) /* Let the child process exit before continuing */
 			exit(EXIT_FAILURE);
