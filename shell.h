@@ -28,7 +28,10 @@ typedef list_t str_list_t;
 
 /* helper functions */
 int _strlen(char *s);
+char *_strcpy(char *dest, char *src);
+char *_strcat(char *dest, char *src);
 
+void *_calloc(unsigned int nmemb, unsigned int size);
 
 /* our functions */
 str_list_t *split_str(char *const string, const char *dlmtr);
