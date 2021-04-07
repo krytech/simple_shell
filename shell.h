@@ -9,6 +9,7 @@
 #include <sys/types.h> /* open */
 #include <sys/wait.h>
 #include <unistd.h>
+#include <errno.h>
 
 /**
  * struct list_s - singly linked list
@@ -30,7 +31,7 @@ typedef list_t str_list_t;
 int _strlen(char *s);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
-
+int _strcmp(char *s1, char *s2);
 void *_calloc(unsigned int nmemb, unsigned int size);
 
 /* our functions */
