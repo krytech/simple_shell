@@ -19,27 +19,27 @@ unsigned int _strlen(char *s)
 /**
  * _strcpy - copies the string pointed to by src,
  * including the terminating null byte (\0), to the buffer pointed to by dest
- * @dest : destination buffer
- * @src : source string
+ * @dest: destination buffer
+ * @src: source string
  * Return: pointer to dest. If src is NULL, dest remains unchanged.
  */
 char *_strcpy(char *dest, char *src)
 {
-        char *end = src;
-        int i, len;
+	char *end = src;
+	int i, len;
 
-        if (!src)
-                return (dest);
+	if (!src)
+		return (dest);
 
-        while (*end != '\0')
-                end++;
+	while (*end != '\0')
+		end++;
 
-        len = end - src;
+	len = end - src;
 
-        for (i = 0; i <= len; i++)
-                dest[i] = src[i];
+	for (i = 0; i <= len; i++)
+		dest[i] = src[i];
 
-        return (dest);
+	return (dest);
 }
 
 /**
@@ -72,30 +72,24 @@ char *_strcat(char *dest, char *src)
 
 
 /**
- * _strcmp - compares two strings
+ * _strncmp - compares the first n bytes of two strings
  * @s1: first string
  * @s2: second string
- * Return: the number value of the comparison
+ * @n: number of bytes to compare; if n = 0, the full lengths of the strings
+ * are compared until one terminates (with a null byte).
+ * Return: difference between first unequal ASCII char values
  */
-
-int _strcmp(char *s1, char *s2)
+int _strncmp(const char *s1, const char *s2, unsigned int n)
 {
 	int i = 0;
+	int comp_all_flag = !n;
 
-	while (s1[i] != '\0' && s2[i] != '\0')
+	while (s1[i] != '\0' && s2[i] != '\0' && (--n || comp_all_flag))
 	{
 		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
+			break;
 		i++;
 	}
 
-	if (s1[i] == s2[i])
-	{
-		return (0);
-	}
-	else
-	{
-		return (s1[i] - s2[i]);
-	}
+	return (s1[i] - s2[i]);
 }
-

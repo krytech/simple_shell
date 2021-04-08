@@ -1,6 +1,27 @@
 #include "shell.h"
 
 /**
+ * get_env_var - get the pointer to a specified environment variable
+ * @env: environment variable array
+ * @get_var: the environment variable to find; must be terminated with '='
+ * Return: pointer to the matching environment variable; NULL if not found
+ */
+char *get_env_var(char **env, const char *get_var)
+{
+	unsigned int var;
+	int len = _strlen(get_var);
+	int diff;
+
+	for (var = 0; env[var]; var++)
+	{
+		diff = _strncmp(env[var], get_var, len);
+		if (diff == 0)
+			return (env[var]);
+	}
+	return (NULL);
+}
+
+/**
  * execute - creates and executes child process with arguments
  * @argv: command line arguments to pass to the child process
  */
@@ -32,15 +53,16 @@ void execute(char **argv)
 int main(int argc, char **argv, char **env)
 {
 	int getl_r;
-	size_t len = 0;
-	char *buffer = NULL;
+	size_t buff_len = 0;
+	char *buffer = NULL, *PATH = get_env_var(env, "PATH=");
 	char **child_argv = NULL;
 	str_list_t *child_CLA = NULL;
 
 	while (1) /* Loop until forced to quit */
 	{
-		write(STDOUT_FILENO,"$", 1); /* Display the command prompt */
-		getl_r = getline(&buffer, &len, stdin); /* Wait for and store user input */
+		write(STDOUT_FILENO, "$", 1); /* Display the command prompt */
+		/* Wait for and store user input */
+		getl_r = getline(&buffer, &buff_len, stdin);
 		if (getl_r == -1) /* ^D or other failure */
 			break;
 		/* Format input for execution */
