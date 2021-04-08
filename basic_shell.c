@@ -36,18 +36,24 @@ int main(int argc, char **argv, char **env)
 	char *buffer = NULL;
 	char **child_argv = NULL;
 	str_list_t *child_CLA = NULL;
+	int count = 0;
 
 	while (1) /* Loop until forced to quit */
 	{
 		write(STDOUT_FILENO,"$", 1); /* Display the command prompt */
 		getl_r = getline(&buffer, &len, stdin); /* Wait for and store user input */
 		if (getl_r == -1) /* ^D or other failure */
+			count++; /* count for enter */
 			break;
 		/* Format input for execution */
 		/* Create a linked list from the input */
 		child_CLA = split_str(buffer, " \n");
 		/* Create argv from the linked list */
 		child_argv = str_list_t_to_array(child_CLA);
+		count++; /* count for errors or execution */
+		/* run search_path fuction */
+		/* if search_path fails, run error_handle.c */
+		/* if search finds the func, run execute */
 		execute(child_argv); /* Execute the child process */
 		free_list(child_CLA);
 		free(child_argv);
