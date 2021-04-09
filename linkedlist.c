@@ -73,7 +73,7 @@ void free_list(list_t *head)
  */
 str_list_t *split_str(char *const string, const char *dlmtr)
 {
-	char *tok_ptr, string_copy;
+	char *tok_ptr, *string_copy;
 	str_list_t *head = NULL;
 
 	if (!string || !dlmtr)

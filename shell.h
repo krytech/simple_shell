@@ -9,7 +9,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-/* #include <errno.h> maybe don't need */
 
 /* linkedlist.c */
 /**
@@ -27,15 +26,18 @@ typedef struct list_s
 	struct list_s *next;
 } list_t;
 typedef list_t str_list_t;
+
 str_list_t *split_str(char *const string, const char *dlmtr);
 char **str_list_t_to_array(str_list_t *head);
 void free_list(list_t *head);
+list_t *add_node(list_t **head, const char *str);
 
 /* string.c */
-int _strlen(const char *s);
+unsigned int _strlen(const char *s);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 int _strncmp(const char *s1, const char *s2, unsigned int n);
+char *_strdup(char *str);
 
 /* env.c */
 void env_builtin(void);
@@ -47,9 +49,7 @@ int write_error(char c);
 void error_main(char **av, char *command, int count);
 
 /* PATH */
-list_t *add_node(list_t **head, const char *str);
-
-/* execute */
+list_t *PATH_search(list_t *input_ll);
 
 
 #endif	/* SHELL_H */

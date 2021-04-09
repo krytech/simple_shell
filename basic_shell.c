@@ -145,7 +145,10 @@ int main(int argc, char **argv, char **env)
 			/* If no built-in was found, run search_path fuction */
 			/* if search_path fails, run error_handle.c */
 			/* if search finds the func, execute child process */
-			execute(child_CLA);
+			if (PATH_search(child_CLA) == NULL)
+				error_main(argv, child_CLA->str, count);
+			else
+				execute(child_CLA);
 		}
 		free_list(child_CLA);
 	}
