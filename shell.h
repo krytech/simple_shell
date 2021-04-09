@@ -28,11 +28,11 @@ typedef struct list_s
 typedef list_t str_list_t;
 
 /* helper functions */
-int _strlen(char *s);
+int _strlen(const char *s);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
-int _strcmp(char *s1, char *s2);
-/* void *_calloc(unsigned int nmemb, unsigned int size); */
+int _strncmp(const char *s1, const char *s2, unsigned int n);
+
 
 /* Lists */
 str_list_t *split_str(char *const string, const char *dlmtr);
@@ -44,7 +44,7 @@ int write_error(char c);
 void error_main(char **av, char *command, int count);
 
 /* PATH */
-
+list_t *add_node(list_t **head, const char *str);
 
 /* execute */
 
