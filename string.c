@@ -70,32 +70,25 @@ char *_strcat(char *dest, char *src)
 	return (dest);
 }
 
-
 /**
- * _strcmp - compares two strings
+ * _strncmp - compares the first n bytes of two strings
  * @s1: first string
  * @s2: second string
- * Return: the number value of the comparison
+ * @n: number of bytes to compare; if n = 0, the full lengths of the strings
+ * are compared until one terminates (with a null byte).
+ * Return: difference between first unequal ASCII char values
  */
-
-int _strcmp(char *s1, char *s2)
+int _strncmp(const char *s1, const char *s2, unsigned int n)
 {
 	int i = 0;
+	int comp_all_flag = !n;
 
-	while (s1[i] != '\0' && s2[i] != '\0')
+	while (s1[i] != '\0' && s2[i] != '\0' && (--n || comp_all_flag))
 	{
 		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
+			break;
 		i++;
 	}
 
-	if (s1[i] == s2[i])
-	{
-		return (0);
-	}
-	else
-	{
-		return (s1[i] - s2[i]);
-	}
+	return (s1[i] - s2[i]);
 }
-
