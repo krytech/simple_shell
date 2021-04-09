@@ -73,24 +73,27 @@ void free_list(list_t *head)
  */
 str_list_t *split_str(char *const string, const char *dlmtr)
 {
-	char *tok_ptr;
+	char *tok_ptr, string_copy;
 	str_list_t *head = NULL;
 
 	if (!string || !dlmtr)
 		return (NULL);
 
+	string_copy = _strdup(string);
+
 	/* Create nodes for each token */
-	tok_ptr = strtok(string, dlmtr);
+	tok_ptr = strtok(string_copy, dlmtr);
 	while (tok_ptr)
 	{
 		if (!append_node(&head, tok_ptr))
 		{
 			free(head);
+			free(string_copy);
 			return (NULL);
 		}
 		tok_ptr = strtok(NULL, dlmtr);
 	}
-
+	free(string_copy);
 	return (head);
 }
 
