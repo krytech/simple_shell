@@ -3,13 +3,13 @@
 
 #include <fcntl.h>
 #include <stdio.h>
-#include <stdlib.h> /* malloc, free */
+#include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/types.h> /* open */
+#include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <errno.h>
+/* #include <errno.h> maybe don't need */
 
 /**
  * struct list_s - singly linked list
@@ -32,15 +32,21 @@ int _strlen(char *s);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 int _strcmp(char *s1, char *s2);
-void *_calloc(unsigned int nmemb, unsigned int size);
+/* void *_calloc(unsigned int nmemb, unsigned int size); */
 
-/* our functions */
+/* Lists */
 str_list_t *split_str(char *const string, const char *dlmtr);
 char **str_list_t_to_array(str_list_t *head);
 void free_list(list_t *head);
 
-/* error functions */
+/* Error functions */
 int write_error(char c);
 void error_main(char **av, char *command, int count);
+
+/* PATH */
+
+
+/* execute */
+
 
 #endif	/* SHELL_H */
