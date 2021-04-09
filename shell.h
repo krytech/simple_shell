@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <errno.h>
 
+/* linkedlist.c */
 /**
  * struct list_s - singly linked list
  * @str: (malloc'd) string
@@ -26,18 +27,20 @@ typedef struct list_s
 	struct list_s *next;
 } list_t;
 typedef list_t str_list_t;
+str_list_t *split_str(char *const string, const char *dlmtr);
+char **str_list_t_to_array(str_list_t *head);
+void free_list(list_t *head);
 
-/* helper functions */
+/* string.c */
 int _strlen(const char *s);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 int _strncmp(const char *s1, const char *s2, unsigned int n);
-void *_calloc(unsigned int nmemb, unsigned int size);
 
-/* our functions */
-str_list_t *split_str(char *const string, const char *dlmtr);
-char **str_list_t_to_array(str_list_t *head);
-void free_list(list_t *head);
+/* env.c */
+void env_builtin(void);
+char **get_env(char ***env_address);
+char *get_env_var(const char *get_var);
 
 /* error functions */
 int write_error(char c);
