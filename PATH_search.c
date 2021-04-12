@@ -2,8 +2,7 @@
 
 /**
  * PATH_search - searches the path for the input command
- * @cmd: pointer to string with command
- * @pptr: pointer to path string
+ * @input_ll: input command linked list
  * Return: pointer to the new first input node, otherwise NULL
  */
 
@@ -14,20 +13,30 @@ list_t *PATH_search(list_t *input_ll)
 	list_t *new_node, *path_ll;
 	struct stat sb;
 
+	/* stat check to handle direct execute with path */
+	if (!input_ll)
+		return (NULL);
+	if (stat(input_ll->str, &sb) == 0)
+		return (input_ll);
+
+	/* creates a dymanic path linked list */
 	path_ll = split_str(get_env_var("PATH="), ":=");
 
 	while (path_ll)
 	{
-		/* malloc buffer */
-		size = _strlen(path_ll->str) + _strlen(input_ll->str) + 2; /* null and slash */
+		/* malloc buffer with slash and null */
+		size = _strlen(path_ll->str) + _strlen(input_ll->str) + 2;
 		buff = malloc(sizeof(char) * size);
 
+		/* adds search criteria */
 		_strcpy(buff, path_ll->str);
 		_strcat(buff, "/");
 		_strcat(buff, input_ll->str);
 
- 		if (stat(buff, &sb) == 0)
+		/* using stat to run a search */
+		if (stat(buff, &sb) == 0)
 		{
+			/* replaces first input_ll with buffer */
 			new_node = input_ll->next;
 
 			free(input_ll->str);
@@ -36,11 +45,11 @@ list_t *PATH_search(list_t *input_ll)
 			input_ll = add_node(&new_node, buff);
 			free(buff);
 			free_list(path_ll);
-			return (input_ll);
+			return (input_ll); /* return pointer */
 		}
 		free(buff);
 		path_ll = path_ll->next;
 	}
 	free_list(path_ll);
-	return (NULL); /* no match */
+	return (NULL); /* return no match */
 }

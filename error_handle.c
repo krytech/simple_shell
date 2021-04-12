@@ -1,12 +1,20 @@
 #include "shell.h"
 
+/**
+ * write_error - simple print error func for count
+ */
+
 int write_error(char c)
 {
 	return (write(STDERR_FILENO, &c, 1));
 }
 
-
-
+/**
+ * error_main - function to print the error command as per the example
+ * @av: error path
+ * @command: command that error'd
+ * @count: count value coming from main
+ */
 
 void error_main(char **av, char *command, int count)
 {
@@ -14,6 +22,7 @@ void error_main(char **av, char *command, int count)
 	int copy = count;
 	int numlen = 1;
 
+	/* writes error path */
 	write(STDERR_FILENO, av[0], _strlen(av[0]));
 	write(STDERR_FILENO, ": ", 2);
 
