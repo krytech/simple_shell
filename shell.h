@@ -51,5 +51,7 @@ void error_main(char **av, char *command, int count);
 /* PATH */
 list_t *PATH_search(list_t *input_ll);
 
+/* our functions */
+char *_strtok(char *str_in, char *delimit);
 
 #endif	/* SHELL_H */
