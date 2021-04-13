@@ -32,15 +32,18 @@ char **str_list_t_to_array(str_list_t *head);
 void free_list(list_t *head);
 list_t *add_node(list_t **head, const char *str);
 
+/* built-ins.c */
+int cd(str_list_t *input_ll);
+
 /* string.c */
 unsigned int _strlen(const char *s);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 int _strncmp(const char *s1, const char *s2, unsigned int n);
-char *_strdup(char *str);
+char *_strdup(const char *str);
 
 /* env.c */
-void env_builtin(void);
+int env(list_t *input_ll);
 char **get_env(char ***env_address);
 char *get_env_var(const char *get_var);
 
@@ -49,7 +52,12 @@ int write_error(char c);
 void error_main(char **av, char *command, int count);
 
 /* PATH */
-list_t *PATH_search(list_t *input_ll);
+list_t *PATH_search(list_t **input_ll);
 
+typedef struct built_in
+{
+	char *name;
+	int (*function)(list_t *input_ll);
+} built_in_t;
 
 #endif	/* SHELL_H */

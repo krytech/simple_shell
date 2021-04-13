@@ -40,8 +40,10 @@ char *get_env_var(const char *get_var)
 
 /**
  * env_builtin - prints all environment variables
+ * @input_ll - linked list
+ * Return: -1 if input_ll is NULL, otherwise 0
  */
-void env_builtin(void)
+int env(list_t *input_ll)
 {
 	int var;
 	char **env = get_env(NULL);
@@ -51,4 +53,5 @@ void env_builtin(void)
 		write(STDOUT_FILENO, env[var], _strlen(env[var]));
 		write(STDOUT_FILENO, "\n", 1);
 	}
+	return (-!input_ll);
 }

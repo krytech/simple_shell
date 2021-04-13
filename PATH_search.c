@@ -7,15 +7,15 @@
  * Return: pointer to the new first input node, otherwise NULL
  */
 
-list_t *PATH_search(list_t *input_ll)
+list_t *PATH_search(list_t **input_ll_p)
 {
 	unsigned int size;
 	char *buff;
-	list_t *new_node, *path_ll;
+	list_t *new_node, *path_ll, *path_ll_head, *input_ll = *input_ll_p;
 	struct stat sb;
 
-	path_ll = split_str(get_env_var("PATH="), ":=");
-
+	path_ll_head = split_str(get_env_var("PATH="), ":=");
+	path_ll = path_ll_head;
 	while (path_ll)
 	{
 		/* malloc buffer */
@@ -33,14 +33,14 @@ list_t *PATH_search(list_t *input_ll)
 			free(input_ll->str);
 			free(input_ll);
 
-			input_ll = add_node(&new_node, buff);
+			*input_ll_p = add_node(&new_node, buff);
 			free(buff);
-			free_list(path_ll);
-			return (input_ll);
+			free_list(path_ll_head);
+			return (new_node);
 		}
 		free(buff);
 		path_ll = path_ll->next;
 	}
-	free_list(path_ll);
+	free_list(path_ll_head);
 	return (NULL); /* no match */
 }

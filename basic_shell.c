@@ -1,6 +1,82 @@
 #include "shell.h"
 
 /**
+ * get_input - Displays a prompt and retrieves user input
+ * @input_ll: address of a string linked list pointer
+ * input will be converted to a linked list and the address stored here
+ * !NOTE! This pointer WILL be overwritten with a new address. It must
+ * be free_list()'d before calling get_input() again to prevent memory leaks.
+ * Return: 0 if getline fails, 1 on success
+ * !NOTE! Yes, these return values are inconsistent
+ */
+int get_input(str_list_t **queue)
+{
+	int getl_r = 0, i;
+	size_t buff_len = 0;
+	char    *buffer = NULL,
+		*prompt = "$";
+
+	*queue = NULL;
+	/* Display the command prompt */
+	write(STDOUT_FILENO, prompt, _strlen(prompt));
+
+	/* Wait for and store user input */
+	getl_r = getline(&buffer, &buff_len, stdin);
+	if (getl_r == -1) /* ^D or other failure */
+	{
+		free(buffer);
+		write(STDOUT_FILENO, "\n", 1); /* Print newline before closing */
+		return (0);
+	}
+	/* Save input line to history */
+	/* Format input for execution */
+	/* Strip out any comments "#" */
+	for (i = 0; buffer[i]; i++)
+	{
+		if (buffer[i] == '#')
+		{
+			buffer[i] = '\0';
+			break;
+		}
+	}
+	/* Split into statements based on the command separator ";" */
+	/* And add statements to a queue */
+	*queue = split_str(buffer, ";\n");
+
+	free(buffer);
+	return (1);
+}
+
+/**
+ * get_built_in - checks if input is calling a shell built-in and
+ * returns a pointer to a built-in function if it finds one
+ * @built_in_name: the name of the built-in to return
+ * Return: pointer to the appropriate built-in; NULL if not found
+ */
+int (*get_built_in(char *built_in_name))(list_t *)
+{
+	int built_in;
+	built_in_t built_ins[] = {
+		/* {"alias", alias}, */
+		{"cd", cd},
+		{"env", env},
+		/* {"exit", exit_built_in}, */
+		/* {"help", help}, */
+		/* {"setenv", setenv}, */
+		/* {"unsetenv", unsetenv}, */
+		{NULL, NULL}
+	};
+
+	/* Find the index of the built-in */
+	for (built_in = 0; built_ins[built_in].name; built_in++)
+	{
+		if (_strncmp(built_in_name, built_ins[built_in].name, 0) == 0)
+			return (built_ins[built_in].function);
+	}
+	return (NULL);
+}
+
+/**
  * execute - creates and executes child process with arguments
  * @input_ll: linked list of commands for the child process
  */
@@ -27,93 +103,7 @@ void execute(str_list_t *input_ll)
 }
 
 /**
- * get_input - Displays a prompt and retrieves user input
- * @input_ll: address of a string linked list pointer
- * input will be converted to a linked list and the address stored here
- * !NOTE! This pointer WILL be overwritten with a new address. It must
- * be free_list()'d before calling get_input() again to prevent memory leaks.
- * Return: 0 if getline fails, 1 on success
- */
-int get_input(str_list_t **input_ll)
-{
-	int getl_r = 0;
-	size_t buff_len = 0;
-	char    *buffer = NULL,
-		*prompt = "$",
-		*delimiters = " \n\t";
-
-	*input_ll = NULL;
-	/* Display the command prompt */
-	write(STDOUT_FILENO, prompt, _strlen(prompt));
-
-	/* Wait for and store user input */
-	getl_r = getline(&buffer, &buff_len, stdin);
-	if (getl_r == -1) /* ^D or other failure */
-	{
-		free(buffer);
-		return (0);
-	}
-	/* Format input for execution */
-	/* Create a linked list from the input */
-	*input_ll = split_str(buffer, delimiters);
-
-	free(buffer);
-	return (1);
-}
-
-/**
- * built_in - checks if input is calling a shell built-in
- * and executes the built in (may move that part to another function)
- * @input_ll: input string linked list
- * Return: ????????????
- * !NOTE! WILL SEGFAULT IF INPUT IS NULL
- */
-int built_in(str_list_t *input_ll)
-{
-	int built_in;
-	char *built_ins[] = {
-		"alias",
-		"cd",
-		"env",
-		"exit",
-		"help",
-		"setenv",
-		"unsetenv",
-		NULL
-	};
-	/* Check input's head node for a built-in command */
-	/* Find the index of the built-in */
-	for (built_in = 0; built_ins[built_in]; built_in++)
-	{
-		if (_strncmp(input_ll->str, built_ins[built_in], 0) == 0)
-			break;
-	}
-	/* Call the appropriate built-in */
-	switch (built_in)
-	{
-	case 0:
-		/* alias(); */
-		break;
-	case 1:
-		/* cd(); */
-		break;
-	case 2:
-		env_builtin();
-		break;
-	case 3: /* exit_builtin(); */
-		free_list(input_ll);
-		/* if (input_ll->next) exit(atoi(input_ll->next->str)); */
-		/* else */
-		exit(0);
-	/* ... */
-	case 7:
-		return (0);
-	}
-		return (1);
-}
-
-/**
- * main - Thompson Shell imitation
+ * main - dash imitation
  * @argc: number of command line arguments
  * @argv: command line arguments
  * @env: environment variables
@@ -121,39 +111,54 @@ int built_in(str_list_t *input_ll)
  */
 int main(int argc, char **argv, char **env)
 {
-	char *PATH;
-	str_list_t *child_CLA = NULL;
-	int count = 0;
+	int (*built_in)(list_t *);
+	char *delimiters = " \t";
+	str_list_t *input_ll = NULL, *queue = NULL, *command;
+	int count = 0, loop = 1, exit_code = 0;
 
 	get_env(&env);
-	PATH = get_env_var("PATH=");
-	while (1) /* Loop until forced to quit */
+	while (loop) /* Loop until forced to quit */
 	{
 		/* Get user input and generate a linked list */
-		if (!get_input(&child_CLA))
+		if (!get_input(&queue))
 			break;/* Close shell if user enters ^D */
 
 		count++; /* count for errors or execution */
 
-		/* Continue if no commands were entered */
-		if (!child_CLA)
-			continue;
-
-		/* Check for and execute built-ins */
-		if (!built_in(child_CLA))
+		/* While there are statements in the queue... */
+		for (command = queue; command; command = command->next)
 		{
+			/* Create linked list from each queued statement */
+			input_ll = split_str(command->str, delimiters);
+			/* Null check */
+			if (!input_ll)
+				break;
+
+			if (_strncmp("exit", input_ll->str, 0) == 0)
+			{
+				/* this will be the last loop */
+				loop = 0;
+				/* in the user entered an exit code, save it */
+				if (input_ll->next)
+					exit_code = atoi(input_ll->next->str);
+				/* We can't use atoi, also if atoi fails, print an error */
+			}
+			/* Check for and execute built-ins */
+			else if ((built_in = get_built_in(input_ll->str)))
+				exit_code = built_in(input_ll->next);
 			/* If no built-in was found, run search_path fuction */
-			/* if search_path fails, run error_handle.c */
-			/* if search finds the func, execute child process */
-			if (PATH_search(child_CLA) == NULL)
-				error_main(argv, child_CLA->str, count);
+			else if (PATH_search(&input_ll))
+				/* if search finds the func, execute child process */
+				execute(input_ll);
 			else
-				execute(child_CLA);
+				/* if search_path fails, print an error */
+				error_main(argv, input_ll->str, count);
+			free_list(input_ll);
 		}
-		free_list(child_CLA);
+		free_list(queue);
 	}
-	write(STDOUT_FILENO, "\n", 1); /* Print newline before closing */
+	exit(exit_code);
 	return (0);
 	/* TEMPORARY SECTION TO GET AROUND COMPILATION WARNINGS */
-	argc += !(argv || env || PATH);
+	argc += 0;
 }

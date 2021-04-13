@@ -101,7 +101,7 @@ int _strncmp(const char *s1, const char *s2, unsigned int n)
  * Return: pointer to copied string, otherwise NULL
  */
 
-char *_strdup(char *str)
+char *_strdup(const char *str)
 {
 	char *s;
 	unsigned int i;
