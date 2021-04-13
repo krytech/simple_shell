@@ -47,11 +47,11 @@ int env(list_t *input_ll);
 char **get_env(char ***env_address);
 char *get_env_var(const char *get_var);
 
-/* Error functions */
+/* error_handle.c */
 int write_error(char c);
 void error_main(char **av, char *command, int count);
 
-/* PATH */
+/* PATH_search.c */
 list_t *PATH_search(list_t **input_ll);
 
 typedef struct built_in
@@ -59,5 +59,8 @@ typedef struct built_in
 	char *name;
 	int (*function)(list_t *input_ll);
 } built_in_t;
+
+/* _strtok.c */
+char *_strtok(char *str_in, char *delimit);
 
 #endif	/* SHELL_H */
