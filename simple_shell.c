@@ -36,6 +36,8 @@ int get_input(str_list_t **queue)
 	{
 		if (buffer[i] == '#')
 		{
+			if (i > 0 && (buffer[i - 1] != ' ' && buffer[i - 1] != '\t'))
+				continue;
 			buffer[i] = '\0';
 			break;
 		}

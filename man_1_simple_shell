@@ -27,13 +27,13 @@ The shell can also handle command separators (;) and comments (#).
 .SH BUILT IN FUNCTIONS
 
 .B exit
-- exits and frees memory
+- Exits the shell
 
 .B env
-- prints the current enviornmental variables
+- Prints the current enviornment variables
 
-.B cd
-- changes the current directory of the proccess
+.B cd [directory]
+- Changes the present working directory to directory. If no directory is entered, cd will change to the $HOME directory (run env to view the path of $HOME).
 
 .SH BUGS
 If encountered, use bug spray.
