@@ -27,21 +27,21 @@ unsigned int _strlen(const char *s)
  */
 char *_strcpy(char *dest, char *src)
 {
-        char *end = src;
-        int i, len;
+	char *end = src;
+	int i, len;
 
-        if (!src)
-                return (dest);
+	if (!src)
+		return (dest);
 
-        while (*end != '\0')
-                end++;
+	while (*end != '\0')
+		end++;
 
-        len = end - src;
+	len = end - src;
 
-        for (i = 0; i <= len; i++)
-                dest[i] = src[i];
+	for (i = 0; i <= len; i++)
+		dest[i] = src[i];
 
-        return (dest);
+	return (dest);
 }
 
 /**
