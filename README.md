@@ -59,7 +59,7 @@ Simple_shell also supports the use of the command separator `;`. Use it to execu
 
 **globals.c** - Helper functions for environmental variables and line count.
 
-**_strtok.c** - Hommemade strtok function (WIP).
+**_strtok.c** - Hommemade strtok function.
 
 **shell.h** - Header file containing all function prototypes, structs and libraries.
 
