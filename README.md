@@ -15,10 +15,10 @@ featureset see the manual page: man_1_simple_shell.
 ## Installation
 
 After cloning the repository, compile all the files by using:
-'$ gcc -Wall -Werror -Wextra -pedantic *.c -o hsh`
+`$ gcc -Wall -Werror -Wextra -pedantic *.c -o hsh`
 
 Then run the shell program with:
-'$ ./hsh'
+`$ ./hsh`
 
 This will give you a new prompt and the shell will wait for input.
 
