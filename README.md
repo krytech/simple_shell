@@ -15,7 +15,7 @@ Then, compile all the files:
 
 ## Usage
 
-Run the shell program with:
+Run simple_shell with:
 `$ ./hsh`
 
 This will launch the shell in **interactive mode** which will display a command prompt (`$ `) and the shell will wait for input.
@@ -23,13 +23,12 @@ Type the name of any command to execute it:
 
 `$ echo Hello World!`
 
-### Command separator
+The shell may be used in **non-interactive mode** by piping or otherwise redirecting input into it (from any shell including itself):
 
-Simple_shell also supports the use of the command separator `;`. Use it to execute multiple commands in a single line:
-
-`$ which ls ; echo "Here it is!"`
+`arbitrary-shell$ echo ls | ./hsh`
 
 ### Built-in commands
+
 Simple_shell offers the following **built-ins**:
 
 `cd [directory]` - (WIP) Changes the present working directory to _directory_. If no directory is entered, `cd` will change to the $HOME directory (run `env` to view the path of $HOME).
@@ -37,6 +36,12 @@ Simple_shell offers the following **built-ins**:
 `env` - Displays all of the shell environment variables.
 
 `exit [status]` - Exits the shell with exit code _status_. If no status is entered, the shell exits with the stauts of the last executed command.
+
+### Command separator
+
+Simple_shell also supports the use of the command separator `;`. Use it to execute multiple commands in a single line:
+
+`$ which ls ; echo "Here it is!"`
 
 ## File Descriptions
 
