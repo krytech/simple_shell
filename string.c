@@ -46,8 +46,8 @@ char *_strcpy(char *dest, char *src)
 
 /**
  * _strcat - concatenates two strings
- * @dest : string to be appended to
- * @src : string to append
+ * @dest: string to be appended to
+ * @src: string to append
  * Return: concatenation of strings. If src is NULL, dest remains unchanged
  */
 char *_strcat(char *dest, char *src)

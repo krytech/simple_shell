@@ -9,13 +9,13 @@
 list_t *PATH_search(list_t **input_ll_p)
 {
 	unsigned int size;
-	char *buff;
+	char *buff, *error_message;
 	list_t *new_node, *path_ll, *path_ll_head, *input_ll = *input_ll_p;
 	struct stat sb;
 
-	/* stat check to handle direct execute with path */
 	if (!input_ll)
 		return (NULL);
+	/* check if input is a valid path which can be directly executed */
 	if (stat(input_ll->str, &sb) == 0)
 		return (input_ll);
 
@@ -53,5 +53,10 @@ list_t *PATH_search(list_t **input_ll_p)
 		path_ll = path_ll->next;
 	}
 	free_list(path_ll_head);
+
+	error_message = _strmerge(2, input_ll->str, ": not found\n");
+	print_error(error_message);
+	free(error_message);
+
 	return (NULL); /* return no match */
 }

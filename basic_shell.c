@@ -2,7 +2,7 @@
 
 /**
  * get_input - Displays a prompt and retrieves user input
- * @input_ll: address of a string linked list pointer
+ * @queue: destination to store a pointer to a linked list of commands
  * input will be converted to a linked list and the address stored here
  * !NOTE! This pointer WILL be overwritten with a new address. It must
  * be free_list()'d before calling get_input() again to prevent memory leaks.
@@ -14,7 +14,7 @@ int get_input(str_list_t **queue)
 	int getl_r = 0, i;
 	size_t buff_len = 0;
 	char    *buffer = NULL,
-		*prompt = "$";
+		*prompt = "$ ";
 
 	*queue = NULL;
 	/* Display the command prompt */
@@ -67,6 +67,9 @@ int (*get_built_in(char *built_in_name))(list_t *)
 		{NULL, NULL}
 	};
 
+	if (!built_in_name)
+		return (NULL);
+
 	/* Find the index of the built-in */
 	for (built_in = 0; built_ins[built_in].name; built_in++)
 	{
@@ -103,6 +106,22 @@ void execute(str_list_t *input_ll)
 }
 
 /**
+ * init_globals - initializes "global" variables.
+ * Saves their addresses into getters.
+ * The getters return the values of the variables without allowing
+ * direct modification (read only).
+ * @argv_adrs: address of argv
+ * @env_adrs: address of env
+ * @count_adrs: address of count
+ */
+void init_globals(char ***argv_adrs, char ***env_adrs, int *count_adrs)
+{
+	get_env(env_adrs);
+	get_argv(argv_adrs);
+	get_count(count_adrs);
+}
+
+/**
  * main - dash imitation
  * @argc: number of command line arguments
  * @argv: command line arguments
@@ -112,52 +131,37 @@ void execute(str_list_t *input_ll)
 int main(int argc, char **argv, char **env)
 {
 	int (*built_in)(list_t *);
-	char *delimiters = " \t";
 	str_list_t *input_ll = NULL, *queue = NULL, *command;
-	int count = 0, loop = 1, exit_code = 0;
+	int count = 0, exit_code = 0;
 
-	get_env(&env);
-	while (loop) /* Loop until forced to quit */
+	init_globals(&argv, &env, &count);
+	while (1) /* Loop until forced to quit */
 	{
 		/* Get user input and generate a linked list */
 		if (!get_input(&queue))
 			break;/* Close shell if user enters ^D */
-
 		count++; /* count for errors or execution */
-
 		/* While there are statements in the queue... */
 		for (command = queue; command; command = command->next)
 		{
 			/* Create linked list from each queued statement */
-			input_ll = split_str(command->str, delimiters);
-			/* Null check */
+			input_ll = split_str(command->str, " \t");
 			if (!input_ll)
 				break;
-
+			built_in = get_built_in(input_ll->str);
 			if (_strncmp("exit", input_ll->str, 0) == 0)
-			{
-				/* this will be the last loop */
-				loop = 0;
-				/* in the user entered an exit code, save it */
-				if (input_ll->next)
-					exit_code = atoi(input_ll->next->str);
-				/* We can't use atoi, also if atoi fails, print an error */
-			}
+				exit_built_in(input_ll, queue, exit_code);
 			/* Check for and execute built-ins */
-			else if ((built_in = get_built_in(input_ll->str)))
+			else if (built_in)
 				exit_code = built_in(input_ll->next);
 			/* If no built-in was found, run search_path fuction */
-			else if (PATH_search(&input_ll))
+			else if (PATH_search(&input_ll)) /* PATH_search modifies input_ll */
 				/* if search finds the func, execute child process */
 				execute(input_ll);
-			else
-				/* if search_path fails, print an error */
-				error_main(argv, input_ll->str, count);
 			free_list(input_ll);
 		}
 		free_list(queue);
 	}
-	exit(exit_code);
 	return (0);
 	/* TEMPORARY SECTION TO GET AROUND COMPILATION WARNINGS */
 	argc += 0;

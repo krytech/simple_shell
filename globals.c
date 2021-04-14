@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * get_env - returns the environment
+ * get_env - returns the shell environment
  * @env_address: address of the environment array
  * Only to be used to initialize the value
  * Consecutive calls should be passed NULL
@@ -15,6 +15,40 @@ char **get_env(char ***env_address)
 	if (env_address)
 		env = *env_address;
 	return (env);
+}
+
+/**
+ * get_argv - returns the main argument vector
+ * @argv_address: address of argv
+ * Only to be used to initialize the value
+ * Consecutive calls should be passed NULL
+ * Return: argv (pointer to an array of strings)
+ */
+char **get_argv(char ***argv_address)
+{
+	static char **argv;
+
+	/* Initialize static variable. Should only be done once. */
+	if (argv_address)
+		argv = *argv_address;
+	return (argv);
+}
+
+/**
+ * get_count - returns the line count
+ * @count_address: address of the count variable
+ * Only to be used to initialize the value
+ * Consecutive calls should be passed NULL
+ * Return: line count
+ */
+int get_count(int *count_address)
+{
+	static int *count;
+
+	/* Initialize static variable. Should only be done once. */
+	if (count_address)
+		count = count_address;
+	return (*count);
 }
 
 /**
@@ -36,22 +70,4 @@ char *get_env_var(const char *get_var)
 			return (env[var]);
 	}
 	return (NULL);
-}
-
-/**
- * env_builtin - prints all environment variables
- * @input_ll - linked list
- * Return: -1 if input_ll is NULL, otherwise 0
- */
-int env(list_t *input_ll)
-{
-	int var;
-	char **env = get_env(NULL);
-
-	for (var = 0; env[var]; var++)
-	{
-		write(STDOUT_FILENO, env[var], _strlen(env[var]));
-		write(STDOUT_FILENO, "\n", 1);
-	}
-	return (-!input_ll);
 }

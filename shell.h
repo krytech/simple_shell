@@ -3,6 +3,7 @@
 
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -34,6 +35,8 @@ list_t *add_node(list_t **head, const char *str);
 
 /* built-ins.c */
 int cd(str_list_t *input_ll);
+int env(list_t *input_ll);
+int exit_built_in(list_t *input_ll, list_t *queue, int exit_code);
 
 /* string.c */
 unsigned int _strlen(const char *s);
@@ -42,18 +45,26 @@ char *_strcat(char *dest, char *src);
 int _strncmp(const char *s1, const char *s2, unsigned int n);
 char *_strdup(const char *str);
 
-/* env.c */
-int env(list_t *input_ll);
+/* globals.c */
+char **get_argv(char ***argv_address);
+int get_count(int *count_address);
 char **get_env(char ***env_address);
 char *get_env_var(const char *get_var);
 
 /* error_handle.c */
-int write_error(char c);
-void error_main(char **av, char *command, int count);
+void print_error(char *command);
+
+char *_strmerge(size_t n_str, ...);
 
 /* PATH_search.c */
 list_t *PATH_search(list_t **input_ll);
 
+/**
+ * struct built_in - named built-in functions
+ * @name: name of the built-in
+ * @function: pointer to the built-in function
+ * Description: Used to pair built-in functions with their names
+ */
 typedef struct built_in
 {
 	char *name;
