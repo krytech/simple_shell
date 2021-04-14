@@ -109,4 +109,5 @@ char *_strtok(char *str, const char *delim)
 		else
 			return (token);
 	}
+	return (NULL);
 }
