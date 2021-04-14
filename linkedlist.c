@@ -82,7 +82,8 @@ str_list_t *split_str(char *const string, const char *dlmtr)
 	string_copy = _strdup(string);
 
 	/* Create nodes for each token */
-	tok_ptr = strtok(string_copy, dlmtr);
+	tok_ptr = _strtok(string_copy, dlmtr);
+
 	while (tok_ptr)
 	{
 		if (!append_node(&head, tok_ptr))
@@ -91,7 +92,7 @@ str_list_t *split_str(char *const string, const char *dlmtr)
 			free(string_copy);
 			return (NULL);
 		}
-		tok_ptr = strtok(NULL, dlmtr);
+		tok_ptr = _strtok(NULL, dlmtr);
 	}
 	free(string_copy);
 	return (head);

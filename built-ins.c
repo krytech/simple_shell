@@ -43,7 +43,7 @@ int cd(str_list_t *input_ll)
 
 /**
  * env - prints all environment variables
- * @input_ll - linked list (mostly useless, required for
+ * @input_ll: linked list (mostly useless, required for
  * prototype consistency with other built-ins)
  * Return: -1 if input_ll is NULL, otherwise 0
  */
@@ -62,10 +62,10 @@ int env(list_t *input_ll)
 
 /**
  * exit_built_in - closes the shell
- * @input_ll - linked list which may contain an exit code.
+ * @input_ll: linked list which may contain an exit code.
  * Prints an error if an invalid exit code was entered.
- * @queue - the command queue, so it can be free_list()'d
- * @exit_code - the exit code of the last command. Used
+ * @queue: the command queue, so it can be free_list()'d
+ * @exit_code: the exit code of the last command. Used
  * by default if no exit code is entered in input_ll.
  * Return: 2 on error, otherwise, does not return
  */
