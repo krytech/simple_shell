@@ -72,6 +72,6 @@ typedef struct built_in
 } built_in_t;
 
 /* _strtok.c */
-char *_strtok(char *str_in, char *delimit);
+char *_strtok(char *str_in, const char *delimit);
 
 #endif	/* SHELL_H */
