@@ -25,7 +25,7 @@ int get_input(str_list_t **queue)
 	if (getl_r == -1) /* ^D or other failure */
 	{
 		free(buffer);
-		write(STDOUT_FILENO, "\n", 1); /* Print newline before closing */
+		/* write(STDOUT_FILENO, "\n", 1); /\* Print newline before closing *\/ */
 		return (0);
 	}
 	/* Save input line to history */
