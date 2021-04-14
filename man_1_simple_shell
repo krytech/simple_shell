@@ -1,0 +1,44 @@
+.TH SHELL 1 "April 15, 2021" "v1" "basic_shell user manual"
+
+.SH NAME
+.B basic_shell
+- command line interpreter
+
+.SH SYNOPSIS
+.B ./hsh
+[command]... [options]... [FILE]
+
+.SH DESCRIPTION
+.B basic_shell
+is a our own Linux command line interpreter designed to function like a
+regular Bash shell.
+
+.B Overview
+
+The basic_shell will read input from the user either from commands or a file,
+interpret them, and attempt to execute them returning the results to the user
+with appropriate errors if applicable. The shell will check for builtins before
+checking the $PATH.
+
+.B Extras
+
+The shell can also handle command separators (;) and comments (#).
+
+.SH BUILT IN FUNCTIONS
+
+.B exit
+- exits and frees memory
+
+.B env
+- prints the current enviornmental variables
+
+.B cd
+- changes the current directory of the proccess
+
+.SH BUGS
+If encountered, use bug spray.
+
+.SH AUTHOR
+Carson Stearn <cstearn@gmail.com>  &&  Justin Masayda <justin.masayda@gmail.com>
+
+.SH SEE ALSO
