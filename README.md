@@ -50,4 +50,5 @@ This will give you a new prompt and the shell will wait for input.
 
 ## Authors
 Carson Stearn <cstearn@gmail.com> @krytech
+
 Justin Masayda <justin.masayda@gmail.com> @keysmusician
