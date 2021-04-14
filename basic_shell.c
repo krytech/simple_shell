@@ -11,21 +11,22 @@
  */
 int get_input(str_list_t **queue)
 {
-	int getl_r = 0, i;
+	int getl_r = 0, i, is_tty = isatty(STDIN_FILENO);
 	size_t buff_len = 0;
 	char    *buffer = NULL,
 		*prompt = "$ ";
 
 	*queue = NULL;
-	/* Display the command prompt */
-	write(STDOUT_FILENO, prompt, _strlen(prompt));
+
+	if (is_tty) /* Display the command prompt if in interactive mode */
+		write(STDOUT_FILENO, prompt, _strlen(prompt));
 
 	/* Wait for and store user input */
 	getl_r = getline(&buffer, &buff_len, stdin);
 	if (getl_r == -1) /* ^D or other failure */
 	{
 		free(buffer);
-		/* write(STDOUT_FILENO, "\n", 1); /\* Print newline before closing *\/ */
+		is_tty ? write(STDOUT_FILENO, "\n", 1) : 0;/* Print newline before closing */
 		return (0);
 	}
 	/* Save input line to history */
@@ -42,7 +43,6 @@ int get_input(str_list_t **queue)
 	/* Split into statements based on the command separator ";" */
 	/* And add statements to a queue */
 	*queue = split_str(buffer, ";\n");
-
 	free(buffer);
 	return (1);
 }
@@ -143,8 +143,7 @@ int main(int argc, char **argv, char **env)
 		count++; /* count for errors or execution */
 		/* While there are statements in the queue... */
 		for (command = queue; command; command = command->next)
-		{
-			/* Create linked list from each queued statement */
+		{ /* Create linked list from each queued statement */
 			input_ll = split_str(command->str, " \t");
 			if (!input_ll)
 				break;
@@ -155,9 +154,14 @@ int main(int argc, char **argv, char **env)
 			else if (built_in)
 				exit_code = built_in(input_ll->next);
 			/* If no built-in was found, run search_path fuction */
-			else if (PATH_search(&input_ll)) /* PATH_search modifies input_ll */
+			/* PATH_search modifies input_ll with a new head node*/
+			else
+			{
+				exit_code = PATH_search(&input_ll);
 				/* if search finds the func, execute child process */
-				execute(input_ll);
+				if (exit_code == 0)
+					execute(input_ll);
+			}
 			free_list(input_ll);
 		}
 		free_list(queue);

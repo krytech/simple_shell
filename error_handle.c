@@ -2,6 +2,8 @@
 
 /**
  * write_error - simple print error func for count
+ * @c: character to write
+ * Return: number of bytes written
  */
 
 int write_error(char c)
@@ -10,7 +12,7 @@ int write_error(char c)
 }
 
 /**
- * error_main - function to print the error command as per the example
+ * print_error - function to print the error command as per the example
  * @message: error message from the command that error'd
  */
 

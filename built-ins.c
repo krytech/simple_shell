@@ -67,6 +67,7 @@ int env(list_t *input_ll)
  * @queue - the command queue, so it can be free_list()'d
  * @exit_code - the exit code of the last command. Used
  * by default if no exit code is entered in input_ll.
+ * Return: 2 on error, otherwise, does not return
  */
 int exit_built_in(list_t *input_ll, list_t *queue, int exit_code)
 {

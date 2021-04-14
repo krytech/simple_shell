@@ -57,7 +57,7 @@ void print_error(char *command);
 char *_strmerge(size_t n_str, ...);
 
 /* PATH_search.c */
-list_t *PATH_search(list_t **input_ll);
+int PATH_search(list_t **input_ll);
 
 /**
  * struct built_in - named built-in functions
