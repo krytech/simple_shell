@@ -137,6 +137,7 @@ int main(int argc, char **argv, char **env)
 	int count = 0, exit_code = 0;
 
 	init_globals(&argv, &env, &count);
+	signal(SIGINT, sigint_handler);
 	while (1) /* Loop until forced to quit */
 	{
 		/* Get user input and generate a linked list */

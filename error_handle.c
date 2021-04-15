@@ -1,6 +1,18 @@
 #include "shell.h"
 
 /**
+ * sigint_handler - prevents shell from closing with ^C
+ * @signum: ignored, but required as a signal handler
+ */
+void sigint_handler(int signum)
+{
+	signal(SIGINT, sigint_handler);
+	write(STDOUT_FILENO, "\n$ ", 3);
+	fflush(stdout);
+	signum += 0;
+}
+
+/**
  * write_error - simple print error func for count
  * @c: character to write
  * Return: number of bytes written

@@ -1,5 +1,13 @@
 #include "shell.h"
 
+
+/**
+ * can_execute - checks if a string represents an executable path
+ * @command: string containing the command to check
+ * Return: 0 on sucess, 127 if file does not exist
+ * 126 if file exists but cannot be executed
+ */
+
 int can_execute(char *command)
 {
 	char *error_message;
