@@ -89,10 +89,11 @@ int (*get_built_in(char *built_in_name))(list_t *)
  * execute - creates and executes child process with arguments
  * @input_ll: linked list of commands for the child process
  */
-void execute(str_list_t *input_ll)
+int execute(str_list_t *input_ll)
 {
 	pid_t pid;
 	char **child_argv = NULL;
+	int wstatus;
 
 	/* Create argv from the linked list */
 	child_argv = str_list_t_to_array(input_ll);
@@ -106,9 +107,13 @@ void execute(str_list_t *input_ll)
 		if (execve(child_argv[0], child_argv, get_env(NULL)) == -1)
 			exit(EXIT_FAILURE);
 	}
-	if (wait(NULL) == -1) /* Let the child process exit before continuing */
-		exit(EXIT_FAILURE);
 	free(child_argv);
+	if (wait(&wstatus) == -1) /* Let the child process exit before continuing */
+		return(EXIT_FAILURE);
+	if (WIFEXITED(wstatus))
+		return (WEXITSTATUS(wstatus));
+	else
+		return (EXIT_FAILURE);
 }
 
 /**
@@ -167,13 +172,13 @@ int main(int argc, char **argv, char **env)
 				exit_code = PATH_search(&input_ll);
 				/* if search finds the func, execute child process */
 				if (exit_code == 0)
-					execute(input_ll);
+					exit_code = execute(input_ll);
 			}
 			free_list(input_ll);
 		}
 		free_list(queue);
 	}
-	return (0);
+	return (exit_code);
 	/* TEMPORARY SECTION TO GET AROUND COMPILATION WARNINGS */
 	argc += 0;
 }
