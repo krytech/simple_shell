@@ -71,7 +71,7 @@ int _atoi(char *str)
 	int res = 0, sign = 1, i = 0;
 
 	if (*str == '\0')
-		return 0;
+		return (0);
 
 	if (str[0] == '-')
 	{
