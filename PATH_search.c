@@ -1,6 +1,5 @@
 #include "shell.h"
 
-
 /**
  * can_execute - checks if a string represents an executable path
  * @command: string containing the command to check
