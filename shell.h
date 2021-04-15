@@ -53,7 +53,7 @@ char *get_env_var(const char *get_var);
 
 /* error_handle.c */
 void print_error(char *command);
-
+void sigint_handler(int signum);
 char *_strmerge(size_t n_str, ...);
 
 /* PATH_search.c */

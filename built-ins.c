@@ -60,6 +60,36 @@ int env(list_t *input_ll)
 	return (-!input_ll);
 }
 
+
+/**
+ * _atoi - converts a string to an int
+ * @str: string to be converted to int
+ * Return: int value of string
+ */
+int _atoi(char *str)
+{
+	int res = 0, sign = 1, i = 0;
+
+	if (*str == '\0')
+		return 0;
+
+	if (str[0] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+
+	for (; str[i] != '\0'; ++i)
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+
+		res = res * 10 + str[i] - '0';
+	}
+
+	return (sign * res);
+}
+
 /**
  * exit_built_in - closes the shell
  * @input_ll: linked list which may contain an exit code.
@@ -80,7 +110,7 @@ int exit_built_in(list_t *input_ll, list_t *queue, int exit_code)
 		{
 			user_code = input_ll->next->str;
 			/* RREPLACE ATOI */
-			exit_code = atoi(user_code);
+			exit_code = _atoi(user_code);
 			/* If invalid number entered */
 			if (exit_code <= 0 &&
 			    _strncmp(user_code, "0", 0))
