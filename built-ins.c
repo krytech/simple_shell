@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <limits.h>
 
 /**
  * cd - changes present working directory
@@ -68,7 +69,8 @@ int env(list_t *input_ll)
  */
 int _atoi(char *str)
 {
-	int res = 0, sign = 1, i = 0;
+	long int res = 0;
+	int sign = 1, i = 0;
 
 	if (*str == '\0')
 		return (0);
@@ -112,8 +114,8 @@ int exit_built_in(list_t *input_ll, list_t *queue, int exit_code)
 			/* RREPLACE ATOI */
 			exit_code = _atoi(user_code);
 			/* If invalid number entered */
-			if (exit_code <= 0 &&
-			    _strncmp(user_code, "0", 0))
+			if ((exit_code <= 0 &&
+			     _strncmp(user_code, "0", 0)) || exit_code > INT_MAX)
 			{
 				error = _strmerge(4, "exit: ", "Illegal number: ",
 						 input_ll->next->str, "\n");
