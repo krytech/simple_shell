@@ -13,8 +13,7 @@ int get_input(str_list_t **queue)
 {
 	int getl_r = 0, i, is_tty = isatty(STDIN_FILENO);
 	size_t buff_len = 0;
-	char    *buffer = NULL,
-		*prompt = "$ ";
+	char    *buffer = NULL, *prompt = "$ ";
 
 	*queue = NULL;
 
@@ -29,8 +28,7 @@ int get_input(str_list_t **queue)
 		is_tty ? write(STDOUT_FILENO, "\n", 1) : 0;/* Print newline before closing */
 		return (0);
 	}
-	/* Save input line to history */
-	/* Format input for execution */
+	/* Save input line to history; Format input for execution */
 	/* Strip out any comments "#" */
 	for (i = 0; buffer[i]; i++)
 	{
@@ -41,6 +39,12 @@ int get_input(str_list_t **queue)
 			buffer[i] = '\0';
 			break;
 		}
+	}
+	if (buffer[0] == ';')
+	{
+		print_error("Syntax error: \";\" unexpected\n");
+		free(buffer);
+		return (1);
 	}
 	/* Split into statements based on the command separator ";" */
 	/* And add statements to a queue */
@@ -99,7 +103,7 @@ void execute(str_list_t *input_ll)
 
 	else if (pid == 0) /* Inside the child process: */
 	{ /* Try to execute string arguments as a command */
-		if (execve(child_argv[0], child_argv, NULL) == -1)
+		if (execve(child_argv[0], child_argv, get_env(NULL)) == -1)
 			exit(EXIT_FAILURE);
 	}
 	if (wait(NULL) == -1) /* Let the child process exit before continuing */
