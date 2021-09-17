@@ -39,6 +39,6 @@ The shell can also handle command separators (;) and comments (#).
 If encountered, use bug spray.
 
 .SH AUTHOR
-Carson Stearn <cstearn@gmail.com>  &&  Justin Masayda <justin.masayda@gmail.com>
+Carson Stearn <cstearn@gmail.com>  &&  Justin Masayda <2705@holbertonschool.com>
 
 .SH SEE ALSO
