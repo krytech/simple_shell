@@ -72,4 +72,4 @@ Simple_shell also supports the use of the command separator `;`. Use it to execu
 ## Authors
 Carson Stearn <cstearn@gmail.com> [@krytech](https://github.com/krytech)
 
-Justin Masayda <justin.masayda@gmail.com> [@keysmusician](https://github.com/keysmusician)
+Justin Masayda <2705@holbertonschool.com> [@keysmusician](https://github.com/keysmusician)
